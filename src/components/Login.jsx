@@ -3,10 +3,9 @@ import Header from "./Header";
 import { checkValidation } from "../utils/validate";
 import { createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../utils/firebase";
-import { useNavigate } from "react-router-dom";
+import { LOGO } from "../utils/constants";
 
 const Login = () => {
-  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +25,6 @@ const Login = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           console.log(user);
-          navigate('/browse')
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -39,7 +37,6 @@ const Login = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           console.log(user)
-          navigate('/browse')
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -59,7 +56,7 @@ const Login = () => {
       <div>
         <img
           className=""
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/a92a67ee-cd07-46a8-8354-c431a96a97b0/web/IN-en-20251103-TRIFECTA-perspective_8a65e995-9926-414c-83c5-f7cc9af10871_large.jpg"
+          src={LOGO}
           alt="backgrond"
         />
       </div>

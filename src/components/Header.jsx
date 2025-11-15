@@ -1,20 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Netflix_Logo_PMS from "../assets/Netflix_Logo_PMS.png";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { addUser, removeUser } from "../utils/userSlice";
 
 const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleSignOut = () => {
     signOut(auth)
-    .then(() => {
-      navigate('/')
-    })
+    .then(() => {})
     .catch((error) => {
       navigate('/error')
     });
   };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        //updating the store
+        dispatch(addUser({uid:uid}))
+        navigate('/browse')
+      } else {
+        // User is signed out
+        dispatch(removeUser());
+        navigate('/')
+      }
+    });
+  },[])
+
   return (
     <div className="w-full flex justify-between absolute px-8 py-2 bg-[linear-gradient(180deg,rgba(0,0,0,0.8)_0%,rgba(0,0,0,0.7889)_8.333%,rgba(0,0,0,0.7556)_16.67%,rgba(0,0,0,0.7)_25%,rgba(0,0,0,0.6222)_33.33%,rgba(0,0,0,0.5222)_41.67%,rgba(0,0,0,0.4)_50%,rgba(0,0,0,0.2778)_58.33%,rgba(0,0,0,0.1778)_66.67%,rgba(0,0,0,0.1)_75%,rgba(0,0,0,0.04444)_83.33%,rgba(0,0,0,0.01111)_91.67%,rgba(0,0,0,0)_100%)]">
       <img className="w-45" src={Netflix_Logo_PMS} alt="logo" />
